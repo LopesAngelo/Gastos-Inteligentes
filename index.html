@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gastos Inteligente</title>
+    
+    <!-- BIBLIOTECA DE GRÁFICOS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- ============================================ -->
+    <!-- TELA DE LOGIN -->
+    <!-- ============================================ -->
+    <div id="telaLogin">
+        <div class="caixaLogin">
+            <h1>💰 Gastos Inteligente</h1>
+            <p>Controle suas finanças de forma inteligente</p>
+            
+            <div>
+                <label>Email</label>
+                <input type="email" id="campoEmail" placeholder="seu@email.com">
+            </div>
+            
+            <div>
+                <label>Senha</label>
+                <input type="password" id="campoSenha" placeholder="Sua senha">
+            </div>
+            
+            <button onclick="fazerLogin()">Entrar</button>
+            <button onclick="criarConta()">Criar Conta</button>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- TELA DO DASHBOARD -->
+    <!-- ============================================ -->
+    <div id="telaDashboard" style="display: none;">
+        
+        <!-- CABEÇALHO -->
+        <div class="cabecalho">
+            <h1>💰 Gastos Inteligente</h1>
+            <div>
+                <span id="nomeUsuario">Usuário</span>
+                <button onclick="sair()">Sair</button>
+            </div>
+        </div>
+
+        <!-- CARDS DE ESTATÍSTICAS -->
+        <div class="estatisticas">
+            <div class="card-stat">
+                <h3>Salário Mensal</h3>
+                <p id="valorSalario">R$ 0,00</p>
+                <small>Receita total</small>
+            </div>
+            
+            <div class="card-stat">
+                <h3>Gastos Totais</h3>
+                <p id="valorGastos">R$ 0,00</p>
+                <small id="percentualGastos">0% do salário</small>
+            </div>
+            
+            <div class="card-stat">
+                <h3>Saldo Disponível</h3>
+                <p id="valorSaldo">R$ 0,00</p>
+                <small id="percentualSaldo">0% restante</small>
+            </div>
+            
+            <div class="card-stat">
+                <h3>Investimento Sugerido</h3>
+                <p id="valorInvestimento">R$ 0,00</p>
+                <small>25% do salário</small>
+            </div>
+        </div>
+
+        <!-- ÁREA PRINCIPAL -->
+        <div class="areaPrincipal">
+            
+            <!-- COLUNA ESQUERDA -->
+            <div class="colunaEsquerda">
+                
+                <!-- GRÁFICO DE GASTOS -->
+                <div class="card">
+                    <h2>📊 Gráfico de Gastos por Categoria</h2>
+                    <canvas id="graficoGastos"></canvas>
+                </div>
+
+                <!-- FORMULÁRIO -->
+                <div class="card">
+                    <h2>➕ Adicionar Informações</h2>
+                    
+                    <!-- Salário -->
+                    <div>
+                        <label>Salário Mensal (R$)</label>
+                        <input type="number" id="campoSalario" step="0.01" placeholder="0.00">
+                    </div>
+
+                    <!-- Adicionar Gasto -->
+                    <div class="formGasto">
+                        <div>
+                            <label>Descrição</label>
+                            <input type="text" id="campoDescricao" placeholder="Ex: Supermercado">
+                        </div>
+                        <div>
+                            <label>Valor (R$)</label>
+                            <input type="number" id="campoValor" step="0.01" placeholder="0.00">
+                        </div>
+                        <div>
+                            <label>Categoria</label>
+                            <select id="campoCategoria">
+                                <option>Alimentação</option>
+                                <option>Transporte</option>
+                                <option>Moradia</option>
+                                <option>Saúde</option>
+                                <option>Lazer</option>
+                                <option>Educação</option>
+                                <option>Outros</option>
+                            </select>
+                        </div>
+                        <button onclick="adicionarGasto()">Adicionar Gasto</button>
+                    </div>
+
+                    <!-- Upload de Arquivo -->
+                    <div class="areaUpload" onclick="document.getElementById('arquivoExtrato').click()">
+                        <p>📄 Importar Extrato Bancário</p>
+                        <small>Clique para selecionar arquivo CSV ou TXT</small>
+                        <input type="file" id="arquivoExtrato" accept=".csv,.txt" onchange="importarExtrato(event)" style="display: none;">
+                    </div>
+
+                    <!-- Lista de Gastos -->
+                    <h3>Lista de Gastos</h3>
+                    <div id="listaGastos"></div>
+                </div>
+            </div>
+
+            <!-- COLUNA DIREITA -->
+            <div class="colunaDireita">
+                
+                <!-- RECOMENDAÇÕES -->
+                <div class="card">
+                    <h2>💡 Recomendações</h2>
+                    <div id="recomendacoes"></div>
+                </div>
+
+                <!-- GRÁFICO DE DISTRIBUIÇÃO -->
+                <div class="card">
+                    <h2>📈 Distribuição Ideal</h2>
+                    <canvas id="graficoDistribuicao"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="dados.js"></script>
+    <script src="gastos.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="graficos.js"></script>
+
+</body>
+</html>
