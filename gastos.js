@@ -66,47 +66,108 @@ function importarExtrato(evento) {
     const arquivo = evento.target.files[0];
     if (!arquivo) return;
 
+    // Verificar tipo de arquivo
+    const tipoArquivo = arquivo.type;
+    const nomeArquivo = arquivo.name.toLowerCase();
+
+    // Se for PDF
+    if (tipoArquivo === 'application/pdf' || nomeArquivo.endsWith('.pdf')) {
+        importarExtratoPDF(arquivo);
+    } 
+    // Se for CSV ou TXT
+    else {
+        importarExtratoTexto(arquivo);
+    }
+}
+
+/**
+ * Importar extrato de arquivo de texto (CSV/TXT)
+ */
+function importarExtratoTexto(arquivo) {
     const leitor = new FileReader();
     
     leitor.onload = function(e) {
         const conteudo = e.target.result;
-        const linhas = conteudo.split('\n');
-        const usuario = buscarUsuarioAtual();
-        let contador = 0;
-
-        // Processar cada linha
-        linhas.forEach(linha => {
-            const partes = linha.split(/[,;]/);
-            
-            if (partes.length >= 2) {
-                const descricao = partes[0].trim();
-                const valorTexto = partes[1].replace(/[^\d,.-]/g, '').replace(',', '.');
-                const valor = Math.abs(parseFloat(valorTexto));
-
-                // Validar e adicionar
-                if (descricao && valor > 0 && !isNaN(valor)) {
-                    usuario.gastos.push({
-                        nome: descricao,
-                        valor: valor,
-                        categoria: 'Outros',
-                        data: new Date().toISOString()
-                    });
-                    contador++;
-                }
-            }
-        });
-
-        // Salvar
-        atualizarUsuarioAtual(usuario);
-        
-        // Atualizar dashboard
-        atualizarDashboard();
-        
-        alert(`✅ Extrato importado! ${contador} transações adicionadas.`);
-        console.log(`✅ Importadas ${contador} transações`);
+        processarLinhasExtrato(conteudo);
     };
 
     leitor.readAsText(arquivo);
+}
+
+/**
+ * Importar extrato de arquivo PDF
+ */
+function importarExtratoPDF(arquivo) {
+    const leitor = new FileReader();
+    
+    leitor.onload = async function(e) {
+        try {
+            const arrayBuffer = e.target.result;
+            
+            // Usar PDF.js para extrair texto
+            const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+            let textoCompleto = '';
+            
+            // Extrair texto de todas as páginas
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const pagina = await pdf.getPage(i);
+                const conteudoTexto = await pagina.getTextContent();
+                
+                // Juntar todos os itens de texto
+                const textoPagina = conteudoTexto.items.map(item => item.str).join(' ');
+                textoCompleto += textoPagina + '\n';
+            }
+            
+            // Processar texto extraído
+            processarLinhasExtrato(textoCompleto);
+            
+        } catch (erro) {
+            console.error('Erro ao processar PDF:', erro);
+            alert('❌ Erro ao processar PDF. Certifique-se de que é um extrato válido.');
+        }
+    };
+
+    leitor.readAsArrayBuffer(arquivo);
+}
+
+/**
+ * Processar linhas do extrato e adicionar gastos
+ */
+function processarLinhasExtrato(conteudo) {
+    const linhas = conteudo.split('\n');
+    const usuario = buscarUsuarioAtual();
+    let contador = 0;
+
+    // Processar cada linha
+    linhas.forEach(linha => {
+        const partes = linha.split(/[,;|\t]/);
+        
+        if (partes.length >= 2) {
+            const descricao = partes[0].trim();
+            const valorTexto = partes[1].replace(/[^\d,.-]/g, '').replace(',', '.');
+            const valor = Math.abs(parseFloat(valorTexto));
+
+            // Validar e adicionar
+            if (descricao && valor > 0 && !isNaN(valor)) {
+                usuario.gastos.push({
+                    nome: descricao,
+                    valor: valor,
+                    categoria: 'Outros',
+                    data: new Date().toISOString()
+                });
+                contador++;
+            }
+        }
+    });
+
+    // Salvar
+    atualizarUsuarioAtual(usuario);
+    
+    // Atualizar dashboard
+    atualizarDashboard();
+    
+    alert(`✅ Extrato importado! ${contador} transações adicionadas.`);
+    console.log(`✅ Importadas ${contador} transações`);
 }
 
 /**
