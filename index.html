@@ -8,6 +8,13 @@
     <!-- BIBLIOTECA DE GRÁFICOS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     
+    <!-- BIBLIOTECA PARA LER PDF -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script>
+        // Configurar PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+    </script>
+    
     <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -127,8 +134,8 @@
                     <!-- Upload de Arquivo -->
                     <div class="areaUpload" onclick="document.getElementById('arquivoExtrato').click()">
                         <p>📄 Importar Extrato Bancário</p>
-                        <small>Clique para selecionar arquivo CSV ou TXT</small>
-                        <input type="file" id="arquivoExtrato" accept=".csv,.txt" onchange="importarExtrato(event)" style="display: none;">
+                        <small>Clique para selecionar arquivo CSV, TXT ou PDF</small>
+                        <input type="file" id="arquivoExtrato" accept=".csv,.txt,.pdf" onchange="importarExtrato(event)" style="display: none;">
                     </div>
 
                     <!-- Lista de Gastos -->
