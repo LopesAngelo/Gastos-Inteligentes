@@ -1,0 +1,530 @@
+/* ============================================ */
+/* ESTILOS ADICIONAIS - HISTÓRICO MENSAL E PWA */
+/* ============================================ */
+
+/* ============================================ */
+/* BOTÃO DE INSTALAÇÃO PWA */
+/* ============================================ */
+
+.btn-instalar-pwa {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.btn-instalar-pwa:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+/* ============================================ */
+/* MODAL DE INSTALAÇÃO PWA */
+/* ============================================ */
+
+.modal-instalacao .modal-content {
+    max-width: 500px;
+}
+
+.icone-instalacao {
+    font-size: 80px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.beneficios-pwa {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.beneficios-pwa li {
+    padding: 10px 0;
+    font-size: 15px;
+    color: #e2e8f0;
+}
+
+body.tema-claro .beneficios-pwa li {
+    color: #475569;
+}
+
+.btn-instalar-grande {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 20px;
+}
+
+.btn-instalar-grande:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+.passos-instalacao {
+    margin: 30px 0;
+}
+
+.passo {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 24px;
+    align-items: flex-start;
+}
+
+.numero-passo {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.texto-passo {
+    flex: 1;
+}
+
+.texto-passo strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #f1f5f9;
+    font-size: 16px;
+}
+
+body.tema-claro .texto-passo strong {
+    color: #0f172a;
+}
+
+.texto-passo p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.nota-ios,
+.nota-desktop {
+    background: rgba(239, 68, 68, 0.1);
+    border-left: 3px solid #ef4444;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+/* ============================================ */
+/* HISTÓRICO MENSAL */
+/* ============================================ */
+
+.modal-historico .modal-content {
+    max-width: 900px;
+    max-height: 85vh;
+}
+
+.abas-container {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #334155;
+}
+
+body.tema-claro .abas-container {
+    border-bottom-color: #e2e8f0;
+}
+
+.aba-mes {
+    background: transparent;
+    border: 2px solid #334155;
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.aba-mes:hover {
+    background: #334155;
+    color: #f1f5f9;
+}
+
+.aba-mes.active {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-color: #6366f1;
+    color: white;
+}
+
+body.tema-claro .aba-mes {
+    border-color: #cbd5e1;
+    color: #64748b;
+}
+
+body.tema-claro .aba-mes:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+/* ============================================ */
+/* CONTEÚDO DO MÊS */
+/* ============================================ */
+
+#conteudoMes {
+    padding: 20px 0;
+}
+
+.resumo-mes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.card-resumo {
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid #334155;
+}
+
+body.tema-claro .card-resumo {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+.card-resumo h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.valor-grande {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.card-resumo small {
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* ============================================ */
+/* CATEGORIAS DO MÊS */
+/* ============================================ */
+
+.categorias-mes {
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #334155;
+}
+
+body.tema-claro .categorias-mes {
+    background: #ffffff;
+    border-color: #e2e8f0;
+}
+
+.categorias-mes h3 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+    color: #f1f5f9;
+}
+
+body.tema-claro .categorias-mes h3 {
+    color: #0f172a;
+}
+
+.item-categoria-mes {
+    margin-bottom: 16px;
+}
+
+.info-categoria {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.nome-categoria {
+    font-weight: 600;
+    color: #f1f5f9;
+}
+
+body.tema-claro .nome-categoria {
+    color: #0f172a;
+}
+
+.percentual-categoria {
+    color: #6366f1;
+    font-weight: 700;
+}
+
+.barra-progresso-categoria {
+    background: #1e293b;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+body.tema-claro .barra-progresso-categoria {
+    background: #e2e8f0;
+}
+
+.progresso-categoria {
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.valor-categoria {
+    text-align: right;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ============================================ */
+/* COMPARAÇÃO ENTRE MESES */
+/* ============================================ */
+
+.comparacao-meses {
+    margin-bottom: 20px;
+}
+
+.comparacao-meses h3 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+}
+
+.card-comparacao {
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #334155;
+}
+
+body.tema-claro .card-comparacao {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+.card-comparacao h4 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #f1f5f9;
+}
+
+body.tema-claro .card-comparacao h4 {
+    color: #0f172a;
+}
+
+.card-comparacao p {
+    margin: 8px 0;
+    font-size: 15px;
+}
+
+.detalhe {
+    color: #94a3b8;
+    font-size: 14px !important;
+}
+
+.mudancas-categorias {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #334155;
+}
+
+body.tema-claro .mudancas-categorias {
+    border-top-color: #e2e8f0;
+}
+
+.mudancas-categorias strong {
+    display: block;
+    margin-bottom: 10px;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.item-mudanca {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+}
+
+/* ============================================ */
+/* DICAS INTELIGENTES */
+/* ============================================ */
+
+.dicas-mes h3 {
+    margin: 0 0 20px 0;
+    font-size: 18px;
+}
+
+.card-dica {
+    display: flex;
+    gap: 15px;
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border-left: 4px solid #6366f1;
+}
+
+body.tema-claro .card-dica {
+    background: #f8fafc;
+}
+
+.card-dica.sucesso {
+    border-left-color: #10b981;
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.card-dica.alerta {
+    border-left-color: #f59e0b;
+    background: rgba(245, 158, 11, 0.05);
+}
+
+.card-dica.investimento {
+    border-left-color: #6366f1;
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.card-dica.info {
+    border-left-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.05);
+}
+
+.icone-dica {
+    font-size: 40px;
+    flex-shrink: 0;
+}
+
+.conteudo-dica {
+    flex: 1;
+}
+
+.conteudo-dica h4 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #f1f5f9;
+}
+
+body.tema-claro .conteudo-dica h4 {
+    color: #0f172a;
+}
+
+.conteudo-dica p {
+    margin: 8px 0;
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+body.tema-claro .conteudo-dica p {
+    color: #64748b;
+}
+
+.acao-dica {
+    background: rgba(99, 102, 241, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.acao-dica strong {
+    color: #6366f1;
+}
+
+/* ============================================ */
+/* BOTÃO HISTÓRICO NO DASHBOARD */
+/* ============================================ */
+
+.btn-historico {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    width: 100%;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 0;
+}
+
+.btn-historico:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+}
+
+/* ============================================ */
+/* RESPONSIVO */
+/* ============================================ */
+
+@media (max-width: 768px) {
+    .resumo-mes {
+        grid-template-columns: 1fr;
+    }
+    
+    .abas-container {
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .modal-historico .modal-content,
+    .modal-instalacao .modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+    
+    .passo {
+        gap: 15px;
+    }
+    
+    .numero-passo {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+    
+    .texto-passo strong {
+        font-size: 14px;
+    }
+    
+    .icone-dica {
+        font-size: 30px;
+    }
+}

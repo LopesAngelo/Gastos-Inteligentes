@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 Gastos Inteligente</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%236366f1'/%3E%3Ctext x='50' y='65' font-size='50' text-anchor='middle' fill='white'%3E💰%3C/text%3E%3C/svg%3E">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Gastos">
+
+    <!-- Bibliotecas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script>pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';</script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-adicionais.css">
+</head>
+<body>
+
+<!-- ============================================ -->
+<!-- TELA DE LOGIN -->
+<!-- ============================================ -->
+<div id="telaLogin">
+    <div class="caixaLogin">
+        <h1>💰 Gastos Inteligente</h1>
+        <p>Controle financeiro com a Regra 50-30-20</p>
+
+        <div>
+            <label>Email</label>
+            <input type="email" id="campoEmail" placeholder="seu@email.com" autocomplete="email">
+        </div>
+        <div>
+            <label>Senha</label>
+            <input type="password" id="campoSenha" placeholder="Sua senha" autocomplete="current-password">
+        </div>
+        <button class="btn-login-primario" onclick="fazerLogin()">Entrar</button>
+        <button class="btn-login-secundario" onclick="criarConta()">Criar Conta</button>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- TELA DO DASHBOARD -->
+<!-- ============================================ -->
+<div id="telaDashboard" style="display:none;">
+
+    <div id="notificacoes" class="notificacoes"></div>
+
+    <!-- CABEÇALHO -->
+    <div class="cabecalho">
+        <h1>💰 Gastos Inteligente</h1>
+        <div>
+            <button id="btnNotificacoes" class="btn-notif" onclick="toggleNotificacoesPush()">🔕 Ativar Notificações</button>
+            <button class="btn-tema" onclick="alternarTema()"><span id="iconeTema">🌙</span></button>
+            <button class="btn-tema" onclick="abrirPerfil()">👤</button>
+            <span id="nomeUsuario">Usuário</span>
+            <button class="btn-sair" onclick="sair()">Sair</button>
+        </div>
+    </div>
+
+    <!-- CARDS -->
+    <div class="estatisticas">
+        <div class="card-stat">
+            <h3>Salário do Mês</h3>
+            <p id="valorSalario">R$ 0,00</p>
+            <small>Receita mensal</small>
+        </div>
+        <div class="card-stat">
+            <h3>Gastos do Mês</h3>
+            <p id="valorGastos">R$ 0,00</p>
+            <small id="percentualGastos">0% do salário</small>
+        </div>
+        <div class="card-stat">
+            <h3>Saldo Disponível</h3>
+            <p id="valorSaldo">R$ 0,00</p>
+            <small id="percentualSaldo">0% restante</small>
+        </div>
+        <div class="card-stat">
+            <h3>Investir (20%)</h3>
+            <p id="valorInvestimento">R$ 0,00</p>
+            <small>Meta 50-30-20</small>
+        </div>
+    </div>
+
+    <!-- ÁREA PRINCIPAL -->
+    <div class="areaPrincipal">
+
+        <!-- COLUNA ESQUERDA -->
+        <div class="colunaEsquerda">
+
+            <div class="card">
+                <h2>📊 Gastos por Categoria — Mês Atual</h2>
+                <canvas id="graficoGastos"></canvas>
+            </div>
+
+            <div class="card">
+                <h2>➕ Registrar Informações</h2>
+
+                <!-- Salário mensal variável -->
+                <div class="salario-mes-container">
+                    <div style="flex:1">
+                        <label id="labelSalario">Salário do Mês (R$)</label>
+                        <input type="number" id="campoSalario" step="0.01" min="0" placeholder="0.00">
+                    </div>
+                    <button class="btn-historico-sal" onclick="abrirHistoricoSalarios()">📅 Outros Meses</button>
+                </div>
+
+                <!-- Formulário de gasto -->
+                <div class="formGasto">
+                    <div>
+                        <label>Descrição</label>
+                        <input type="text" id="campoDescricao" placeholder="Ex: Supermercado"
+                               oninput="sugerirCategoria(this.value)" maxlength="100" autocomplete="off">
+                    </div>
+                    <div>
+                        <label>Valor (R$)</label>
+                        <input type="number" id="campoValor" step="0.01" min="0.01" placeholder="0.00">
+                    </div>
+                    <div>
+                        <label>Categoria</label>
+                        <select id="campoCategoria">
+                            <optgroup label="🏠 Necessidades (50%)">
+                                <option>Alimentação</option>
+                                <option>Transporte</option>
+                                <option>Moradia</option>
+                                <option>Saúde</option>
+                            </optgroup>
+                            <optgroup label="🎉 Desejos (30%)">
+                                <option>Lazer</option>
+                                <option>Outros</option>
+                            </optgroup>
+                            <optgroup label="📈 Futuro (20%)">
+                                <option>Educação</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <button onclick="adicionarGasto()">Adicionar</button>
+                </div>
+
+                <!-- Recorrente -->
+                <div class="recorrente-container">
+                    <label class="label-recorrente">
+                        <input type="checkbox" id="campoRecorrente" onchange="toggleFrequencia()" style="width:auto;margin-right:8px">
+                        🔄 Gasto Recorrente
+                    </label>
+                    <div id="grupoFrequencia" style="display:none;margin-top:10px">
+                        <label>Frequência</label>
+                        <select id="campoFrequencia">
+                            <option value="mensal">Mensal</option>
+                            <option value="semanal">Semanal</option>
+                            <option value="anual">Anual</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Upload extrato -->
+                <div class="areaUpload" onclick="document.getElementById('arquivoExtrato').click()">
+                    <p>📄 Importar Extrato Bancário</p>
+                    <small>CSV, TXT ou PDF</small>
+                    <input type="file" id="arquivoExtrato" accept=".csv,.txt,.pdf" onchange="importarExtrato(event)" style="display:none">
+                </div>
+
+                <!-- Meta -->
+                <div class="meta-card">
+                    <div class="meta-header">
+                        <h3>🎯 Meta de Economia</h3>
+                        <button class="btn-meta" onclick="definirMeta()">Definir Meta</button>
+                    </div>
+                    <div id="metaConteudo">
+                        <p style="color:#94a3b8;text-align:center">Defina uma meta para este mês!</p>
+                    </div>
+                </div>
+
+                <!-- Orçamentos -->
+                <div class="card" style="margin-top:0;padding:18px">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+                        <h3 style="margin:0">🎯 Orçamento por Categoria</h3>
+                        <button class="btn-meta" onclick="abrirModalOrcamentos()">Definir Limites</button>
+                    </div>
+                    <div id="painelOrcamentos">
+                        <p class="orcamento-vazio">Nenhum orçamento definido ainda.</p>
+                    </div>
+                </div>
+
+                <!-- Botões -->
+                <div class="botoes-acao">
+                    <button class="btn-historico" onclick="abrirHistoricoMensal()">📅 Histórico Mensal</button>
+                    <button class="btn-csv" onclick="exportarCSV()">📊 Exportar CSV</button>
+                </div>
+
+                <!-- Lista -->
+                <h3 style="margin-top:20px">Lista de Gastos</h3>
+                <div class="controles">
+                    <input type="text" id="buscaGasto" placeholder="🔍 Buscar..." onkeyup="buscarGastos()">
+                    <input type="month" id="filtroPeriodo" onchange="filtrarPorPeriodo()">
+                    <select id="ordenacao" onchange="ordenarGastos()">
+                        <option value="data-desc">Mais recentes</option>
+                        <option value="data-asc">Mais antigos</option>
+                        <option value="valor-desc">Maior valor</option>
+                        <option value="valor-asc">Menor valor</option>
+                        <option value="categoria">Categoria A-Z</option>
+                    </select>
+                    <button onclick="limparFiltros()" title="Limpar filtros" style="background:#334155;border:none;color:#94a3b8;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:13px;transition:all 0.2s" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color='#94a3b8'">✕ Limpar</button>
+                </div>
+                <div id="listaGastos"></div>
+                <div id="paginacao" class="paginacao"></div>
+            </div>
+        </div>
+
+        <!-- COLUNA DIREITA -->
+        <div class="colunaDireita">
+
+            <div class="card">
+                <h2>📈 Evolução dos Últimos 6 Meses</h2>
+                <canvas id="graficoEvolucao"></canvas>
+            </div>
+
+            <div class="card">
+                <h2>💡 Análise & Recomendações</h2>
+                <div id="recomendacoes"></div>
+            </div>
+
+            <div class="card">
+                <h2>📊 Regra 50-30-20</h2>
+                <div style="margin-bottom:10px;font-size:12px;color:#94a3b8;line-height:1.8">
+                    <span style="color:#ef4444">■</span> Necessidades: Moradia, Alimentação, Transporte, Saúde &nbsp;
+                    <span style="color:#f59e0b">■</span> Desejos: Lazer, Outros &nbsp;
+                    <span style="color:#10b981">■</span> Futuro: Educação + Poupança
+                </div>
+                <canvas id="graficoDistribuicao"></canvas>
+            </div>
+
+            <!-- GRÁFICO TENDÊNCIA POR CATEGORIA -->
+            <div class="card">
+                <h2>📉 Tendência por Categoria</h2>
+                <p style="font-size:12px;color:#94a3b8;margin-bottom:12px">Evolução dos gastos por categoria nos últimos 6 meses</p>
+                <div class="filtros-tendencia">
+                    <span style="font-size:12px;color:#94a3b8;margin-right:8px">Filtrar:</span>
+                    <label class="filtro-label"><input type="checkbox" class="filtro-tendencia" value="Alimentação" checked onchange="atualizarGraficoTendencia()"> Alimentação</label>
+                    <label class="filtro-label"><input type="checkbox" class="filtro-tendencia" value="Transporte" checked onchange="atualizarGraficoTendencia()"> Transporte</label>
+                    <label class="filtro-label"><input type="checkbox" class="filtro-tendencia" value="Moradia" checked onchange="atualizarGraficoTendencia()"> Moradia</label>
+                    <label class="filtro-label"><input type="checkbox" class="filtro-tendencia" value="Saúde" checked onchange="atualizarGraficoTendencia()"> Saúde</label>
+                    <label class="filtro-label"><input type="checkbox" class="filtro-tendencia" value="Lazer" checked onchange="atualizarGraficoTendencia()"> Lazer</label>
+                    <label class="filtro-label"><input type="checkbox" class="filtro-tendencia" value="Educação" checked onchange="atualizarGraficoTendencia()"> Educação</label>
+                    <label class="filtro-label"><input type="checkbox" class="filtro-tendencia" value="Outros" checked onchange="atualizarGraficoTendencia()"> Outros</label>
+                </div>
+                <div style="height:280px;margin-top:14px">
+                    <canvas id="graficoTendencia"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS — ordem importa -->
+<script src="dados.js"></script>
+<script src="melhorias.js"></script>
+<script src="gastos.js"></script>
+<script src="dashboard.js"></script>
+<script src="graficos.js"></script>
+<script src="ia-categorizacao.js"></script>
+<script src="perfil.js"></script>
+<script src="historico-mensal.js"></script>
+<script src="firebase-config.js"></script>
+<script src="pwa-melhorado.js"></script>
+
+</body>
+</html>
